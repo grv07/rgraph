@@ -1,2 +1,2 @@
 # rgraph
-Rust graph algorithums
+Rust graph algorithms
