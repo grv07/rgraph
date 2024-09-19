@@ -14,14 +14,13 @@ impl Graph {
 
     fn dfs(&self, v: &usize, cache: &mut [usize]) {
         if let Some(childs) = self.nodes.get(&v) {
-            // println!("{:?}", childs);
+            println!("{:?}", v);
             for child in childs {
                 if cache[child - 1] == 1 {
                     continue;
                 }
                 cache[child - 1] = 1;
                 self.dfs(child, cache);
-                println!("{:?}", child);
             }
         } else {
             println!("{:?}", v);
@@ -34,7 +33,6 @@ impl Graph {
         q.push_back(self.root);
 
         while !q.is_empty() {
-            // println!("{t_cache:?}");
             if let Some(item) = q.pop_front() {
                 if t_cache[item - 1] == 1 {
                     continue;
@@ -67,6 +65,11 @@ fn main() {
     ]
     .into_iter()
     .collect();
+
+    println!("{:?}", nodes);
+
+    let g = Graph::new(1, nodes);
+    g.bfs();
 
     let nodes_dfs: Nodes = vec![
         (1, vec![2, 3]),
