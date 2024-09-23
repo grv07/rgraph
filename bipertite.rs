@@ -1,6 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 
-type AdjL = HashMap<i32, Vec<i32>>;
+type AdjL = HashMap<usize, Vec<usize>>;
 
 fn main() {
     let data: AdjL = vec![
@@ -10,9 +10,12 @@ fn main() {
         (3, vec![0, 2]),
     ]
     .into_iter()
-    .collect::<HashMap<i32, Vec<i32>>>();
+    .collect::<HashMap<usize, Vec<usize>>>();
 
-    println!("Is bipertite : {}", bfs(&data, 0));
+    println!("Is bipertite via BFS: {}", bfs(&data, 0));
+    println!("Is bipertite via DFS: {}", dfs(&data, 0));
+
+    println!("");
 
     let data: AdjL = vec![
         (0, vec![1, 3]),
@@ -21,32 +24,33 @@ fn main() {
         (3, vec![0, 2]),
     ]
     .into_iter()
-    .collect::<HashMap<i32, Vec<i32>>>();
+    .collect::<HashMap<usize, Vec<usize>>>();
 
-    println!("Is bipertite : {}", bfs(&data, 0));
+    println!("Is bipertite via BFS: {}", bfs(&data, 0));
+    println!("Is bipertite via DFS: {}", dfs(&data, 0));
 }
 
-fn bfs(d: &AdjL, s: i32) -> bool {
+fn bfs(d: &AdjL, s: usize) -> bool {
     let mut c = 1;
     let mut q = VecDeque::new();
     let mut v = vec![-1; d.len()];
     q.push_back(s);
 
-    v[s as usize] = c % 2;
+    v[s] = c % 2;
 
     while let Some(item) = q.pop_front() {
         c += 1;
         let color = c % 2;
 
         for i in d.get(&item).unwrap() {
-            if v[*i as usize] != -1 {
-                if v[item as usize] == color {
+            if v[*i] != -1 {
+                if v[item] == color {
                     return false;
                 }
                 continue;
             }
 
-            v[item as usize] = color;
+            v[item] = color;
 
             q.push_back(*i);
         }
@@ -55,4 +59,26 @@ fn bfs(d: &AdjL, s: i32) -> bool {
     return true;
 }
 
-// fn dfs() {}
+fn dfs(d: &AdjL, root: usize) -> bool {
+    let mut c = 1;
+    let mut s = VecDeque::new();
+    s.push_back(root);
+
+    let mut v = vec![-1; d.len()];
+
+    while let Some(item) = s.pop_back() {
+        let color = c % 2;
+        for al in d.get(&item).unwrap() {
+            if v[*al] != -1 {
+                if v[item] == color {
+                    return false;
+                }
+                continue;
+            }
+            v[item] = color;
+            s.push_back(*al);
+        }
+        c += 1;
+    }
+    return true;
+}
