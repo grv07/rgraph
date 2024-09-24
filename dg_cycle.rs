@@ -22,6 +22,48 @@ fn main() {
 
     let out = dfs(&mut data, 0, &mut v, &mut p);
     println!("Output: {:?}", out);
+
+    let mut data: AjL = vec![
+        (0, vec![1]),
+        (1, vec![2]),
+        (2, vec![3]),
+        (3, vec![4, 5]),
+        (4, vec![6]),
+        (5, vec![6]),
+        (6, vec![7]),
+        (7, vec![]),
+    ]
+    .into_iter()
+    .collect::<HashMap<usize, Vec<usize>>>();
+
+    let mut v = vec![0; data.len()];
+    let mut p = vec![0; data.len()];
+
+    let out = dfs(&mut data, 0, &mut v, &mut p);
+    println!("Output: {:?}", out);
+
+    let mut data: AjL = vec![
+        (0, vec![1]),
+        (1, vec![2, 8]),
+        (2, vec![3]),
+        (3, vec![4, 5]),
+        (4, vec![6]),
+        (5, vec![6]),
+        (6, vec![7]),
+        (7, vec![]),
+        (8, vec![9]),
+        (9, vec![10]),
+        (10, vec![8]),
+        (11, vec![9]),
+    ]
+    .into_iter()
+    .collect::<HashMap<usize, Vec<usize>>>();
+
+    let mut v = vec![0; data.len()];
+    let mut p = vec![0; data.len()];
+
+    let out = dfs(&mut data, 0, &mut v, &mut p);
+    println!("Output: {:?}", out);
 }
 
 fn dfs(d: &AjL, r: usize, v: &mut Vec<usize>, p: &mut Vec<usize>) -> bool {
