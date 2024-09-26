@@ -14,8 +14,44 @@ fn main() {
     .into_iter()
     .collect::<HashMap<usize, Vec<usize>>>();
 
-    let mut vio = vec![0; data.len()];
+    let mut vio = get_vio(&data);
+    let mut s = get_stack(&vio);
+
+    let rs = bfs(&data, &mut s, &mut vio);
+    println!("Topological order of graph:  {rs:?}");
+
+    let data: AdjL = vec![
+        (0, vec![1]),
+        (1, vec![2]),
+        (2, vec![3, 4]),
+        (3, vec![1]),
+        (4, vec![]),
+    ]
+    .into_iter()
+    .collect::<HashMap<usize, Vec<usize>>>();
+
+    let mut vio = get_vio(&data);
+    let mut s = get_stack(&vio);
+
+    let rs = bfs(&data, &mut s, &mut vio);
+
+    println!("Check if graph have cycle");
+    println!("Topological order of graph:  {rs:?}");
+}
+
+fn get_stack(vio: &Vec<usize>) -> VecDeque<usize> {
     let mut s = VecDeque::new();
+
+    for i in 0..vio.len() {
+        if vio[i] == 0 {
+            s.push_back(i);
+        }
+    }
+    s
+}
+
+fn get_vio(data: &AdjL) -> Vec<usize> {
+    let mut vio = vec![0; data.len()];
 
     for (_, values) in data.iter() {
         for v in values {
@@ -23,19 +59,12 @@ fn main() {
         }
     }
 
-    for i in 0..vio.len() {
-        if vio[i] == 0 {
-            // println!("{i}");
-            s.push_back(i);
-        }
-    }
-
-    let rs = bfs(&data, &mut s, &mut vio);
-    println!("Topological order of graph:  {rs:?}");
+    vio
 }
 
 fn bfs(d: &AdjL, s: &mut VecDeque<usize>, vio: &mut Vec<usize>) -> Vec<usize> {
     let mut rs = vec![];
+
     while let Some(item) = s.pop_front() {
         rs.push(item);
         for i in d.get(&item).unwrap() {
